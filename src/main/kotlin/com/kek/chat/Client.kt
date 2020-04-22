@@ -1,8 +1,13 @@
 package com.kek.chat
 
-class Client(name: String, address: String, port: String) {
+import io.grpc.ManagedChannelBuilder
+
+
+class Client(val name: String, val address: String, val port: Int) {
+    private val channel = ManagedChannelBuilder.forAddress(address, port).usePlaintext()
+    val stub = ChatCoroutineStub(channel)
     fun runClient() {
-        TODO("Not yet implemented")
+
     }
 
 }

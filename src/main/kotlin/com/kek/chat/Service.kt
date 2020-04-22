@@ -16,7 +16,6 @@ class ChatService(private val name: String) : ChatGrpc.ChatImplBase() {
             override fun onCompleted() {
                 responseObserver?.onCompleted()
             }
-
         }
     }
 
