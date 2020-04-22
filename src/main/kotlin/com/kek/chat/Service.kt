@@ -24,7 +24,6 @@ class ChatService(private val name: String) : ChatGrpc.ChatImplBase() {
         request: ChatOuterClass.ConnectMessage,
         responseObserver: StreamObserver<ChatOuterClass.ConnectMessage>
     ) {
-        //start ui
         val answer = ChatOuterClass.ConnectMessage.newBuilder().setName(name).build()
         responseObserver.onNext(answer)
         responseObserver.onCompleted()
