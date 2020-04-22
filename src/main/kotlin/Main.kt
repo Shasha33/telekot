@@ -1,4 +1,5 @@
-
+import com.kek.chat.Client
+import com.kek.chat.Server
 
 fun main(args: Array<String>) {
     when(args.size) {
