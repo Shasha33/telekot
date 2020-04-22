@@ -39,7 +39,7 @@ test {
 protobuf {
     protoc { artifact = 'com.google.protobuf:protoc:3.5.1-1' }
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:3.5.1-1" }
+        grpc { artifact = "'io.grpc:protoc-gen-grpc-java:1.13.0-SNAPSHOT'" }
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }
