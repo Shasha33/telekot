@@ -1,10 +1,5 @@
 service Chat {
-    rpc Connect (ConnectRequest) returns (ConnectRequest) {}
-    rpc Char(stream Message) returns (stream Message) {}
-}
-
-message ConnectRequest {
-    required string name = 1;
+    rpc Chat(stream Message) returns (stream Message) {}
 }
 
 message Message {
