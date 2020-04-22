@@ -8,6 +8,6 @@ class Server(private val port: Int, private val name: String) {
     }
 
     fun startChat(message: ChatOuterClass.ConnectMessage): Client {
-        return Client(message.host, message.port)
+        return Client(name, message.host, message.port)
     }
 }
