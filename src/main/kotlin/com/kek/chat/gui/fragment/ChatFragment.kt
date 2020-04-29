@@ -15,7 +15,6 @@ class ChatFragment() : Fragment("") {
     override val root = vbox {
         prefWidth = 568.0
         prefHeight = 320.0
-        add(textFlow)
 
         form {
             fieldset {
@@ -23,15 +22,15 @@ class ChatFragment() : Fragment("") {
                     textfield(input) {
                         addEventHandler(KeyEvent.KEY_PRESSED) {
                             if (it.code == KeyCode.ENTER) {
-                                controller.send(name, input.value ?: "")
+                                controller.sendMessage(name, input.value ?: "")
                                 input.value = ""
                             }
                         }
                     }
                 }
             }
-
         }
+        add(textFlow)
     }
     override fun onDock() {
 

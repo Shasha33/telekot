@@ -18,7 +18,4 @@ class MainController : Controller() {
         client.sendMessage(channel, message)
     }
 
-    fun send(name: String, msg: String) {
-        println(msg)
-    }
 }
