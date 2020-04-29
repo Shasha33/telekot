@@ -7,8 +7,7 @@ import tornadofx.*
 
 class MainView : View("Main menu") {
 
-    val controller: MainController by inject()
-    val input = SimpleStringProperty("general")
+    private val input = SimpleStringProperty("general")
 
     override val root = vbox {
         form {

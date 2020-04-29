@@ -72,4 +72,5 @@ fun main() {
     client.openChat("new_one") {
         println(it)
     }
+    client.sendMessage("new_one", "aaaaaaaaa")
 }
