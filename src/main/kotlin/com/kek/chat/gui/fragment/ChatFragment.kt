@@ -1,31 +1,32 @@
 package com.kek.chat.gui.fragment
 
 import com.kek.chat.gui.MainController
-import javafx.beans.property.SimpleStringProperty
-import javafx.scene.Parent
-import javafx.scene.text.TextFlow
 import tornadofx.*
 
 class ChatFragment() : Fragment("") {
-    private val name = SimpleStringProperty("")
+    private var name  = ""
     val controller: MainController by inject()
 
-    private val textFlow = textflow { text("init\n") }
+    private val textFlow = textflow {}
     override val root = vbox {
         add(textFlow)
         prefWidth = 568.0
         prefHeight = 320.0
     }
     override fun onDock() {
-        name.value = params["name"] as String?
-        title = name.value ?: ""
 
-        addText("heh")
-        addText("kek")
+        name = params["name"] as String? ?: ""
+        title = name
+        controller.bindToChat(name) { addMessage(it) }
     }
 
-    private fun addText(newText: String) {
-        textFlow.add(text(newText + "\n"))
+    override fun onUndock() {
+        super.onUndock()
+        controller.unbind(name)
+    }
+
+    private fun addMessage(newText: String) {
+        textFlow.add(text(">> $newText\n"))
     }
 
 }
