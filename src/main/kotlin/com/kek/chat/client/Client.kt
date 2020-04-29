@@ -3,7 +3,7 @@ package com.kek.chat.client
 import com.rabbitmq.client.*
 import kotlinx.serialization.toUtf8Bytes
 
-class Client(host: String = "localhost") {
+class Client(private val name: String = "Petr", host: String = "localhost") {
     private var connection: Connection
     private var channels: MutableList<Channel> = mutableListOf()
     private val queues: MutableList<String> = mutableListOf()
@@ -50,8 +50,16 @@ class Client(host: String = "localhost") {
         val index = queues.indexOf(channelName)
         val channel = channels[index]
 
-        channel.basicPublish(channelName, channelName, AMQP.BasicProperties.Builder().build(), message.toUtf8Bytes())
+        channel.basicPublish(channelName, channelName, AMQP.BasicProperties.Builder().build(), "$name : $message".toUtf8Bytes())
 //        channel.basicAck()
+    }
+
+    fun unbindChannel(name: String) {
+        val index = queues.indexOf(name)
+        val chanel = channels[index]
+        chanel.close()
+        channels.removeAt(index)
+        queues.removeAt(index)
     }
 
     fun close() {
