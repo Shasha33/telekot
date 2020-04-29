@@ -1,6 +1,7 @@
 package com.kek.chat.client
 
 import com.rabbitmq.client.*
+import kotlinx.serialization.toUtf8Bytes
 
 class Client(host: String = "localhost") {
     private var connection: Connection
@@ -45,7 +46,22 @@ class Client(host: String = "localhost") {
         channel.basicConsume(queue, true, consumer)
     }
 
+    fun sendMessage(channelName: String, message: String) {
+        val index = queues.indexOf(channelName)
+        val channel = channels[index]
+
+        channel.basicPublish(channelName, channelName, AMQP.BasicProperties.Builder().build(), message.toUtf8Bytes())
+//        channel.basicAck()
+    }
+
     fun close() {
         connection.close()
+    }
+}
+
+fun main() {
+    val client = Client()
+    client.openChat("new_one") {
+        println(it)
     }
 }
