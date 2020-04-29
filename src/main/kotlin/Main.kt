@@ -1,25 +1,54 @@
-import com.kek.chat.Client
-import com.kek.chat.Server
+import javafx.scene.paint.Color
+import tornadofx.*
+
+class HelloWorld : View() {
+    override val root = gridpane {
+        button("North") {
+            useMaxWidth = true
+            gridpaneConstraints {
+                columnRowIndex(0,0)
+                marginBottom = 10.0
+                columnSpan = 2
+            }
+        }
+        button("West").gridpaneConstraints {
+            columnRowIndex(0,1)
+        }
+        button("East").gridpaneConstraints {
+            columnRowIndex(1,1)
+        }
+
+        button("South") {
+            useMaxWidth = true
+            gridpaneConstraints {
+                columnRowIndex(0,2)
+                marginTop = 10.0
+                columnSpan = 2
+            }
+        }
+    }
+}
+
+class HelloWorldStyle : Stylesheet() {
+    companion object {
+        val mainPanel by cssclass()
+    }
+
+    init {
+        root {
+            prefWidth = 400.px
+            prefHeight = 400.px
+        }
+
+        mainPanel {
+            borderWidth += box(4.px)
+            borderColor += box(Color.RED)
+        }
+    }
+}
+
+class HelloWorldApp : App(HelloWorld::class, HelloWorldStyle::class)
 
 fun main(args: Array<String>) {
-    when(args.size) {
-        3 -> {
-            val name = args[0]
-            val address = args[1]
-            val port = args[2]
-            val client = Client(name, address, port)
-            client.runClient()
-        }
-
-        2 -> {
-            val name = args[0]
-            val port = args[1]
-            val server = Server(name, port)
-            server.runServer()
-        }
-        else -> {
-            print("unsupported argument number")
-        }
-
-    }
+    launch<HelloWorldApp>()
 }

@@ -1,23 +1,10 @@
-buildscript {
-    ext.kotlin_version = '1.2.21'
-
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.5'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.3.72'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.70'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.3.70'
 }
-
-apply plugin: 'kotlin'
-apply plugin: 'com.google.protobuf'
-apply plugin: 'idea'
 
 group 'org.example'
 version '1.0-SNAPSHOT'
@@ -26,32 +13,24 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    jcenter()
+}
+mainClassName = 'MyApp'
+
+javafx {
+    version = "12"
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing', 'javafx.media' ]
 }
 
-
-test {
-    useJUnitPlatform()
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
-}
-
-protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:3.11.0" }
-    plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.28.1" }
-    }
-    generateProtoTasks {
-        all()*.plugins { grpc {} }
-    }
-}
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.6.1'
-    implementation "io.grpc:grpc-stub:1.28.1"
-    implementation "io.grpc:grpc-protobuf:1.28.1"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile 'no.tornado:tornadofx:2.0.0-SNAPSHOT'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.3.61"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5'
 }
 
 compileKotlin {
@@ -60,4 +39,3 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
-
