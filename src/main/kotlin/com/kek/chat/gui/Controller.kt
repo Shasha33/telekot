@@ -7,7 +7,7 @@ class MainController : Controller() {
     private val client = Client()
 
     fun bindToChat(name: String, handler: (String) -> Unit) {
-        client.bindChatChannel(name, handler)
+        client.openChat(name, handler)
     }
 
     fun unbind(name: String) {
