@@ -4,4 +4,8 @@ import tornadofx.Controller
 
 class MainController : Controller() {
 
+    fun printToChannelChat(name: String, message: String) {
+
+    }
+
 }
