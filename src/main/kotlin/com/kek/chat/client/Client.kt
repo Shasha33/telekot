@@ -24,15 +24,16 @@ class Client(private val name: String = "Petr", host: String = "localhost") {
         val channel = connection.createChannel()
         channel.exchangeDeclare(name, BuiltinExchangeType.FANOUT)
         channels.add(channel)
+        queues.add(name)
     }
 
     fun bindChatChannel(channelName: String, messageHandler: (String) -> Unit) {
         val channel = connection.createChannel()
-        val queueName: String = channel.queueDeclare(channelName, true, true, true, emptyMap()).queue
-        channels.add(channel)
-        queues.add(queueName)
+        val queueName: String = channel.queueDeclare().queue
+        println(queueName)
+//        queues.add(queueName)
 
-        channel.queueBind(queueName, channelName, queueName) //??
+        channel.queueBind(queueName, channelName, "")
 
         val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
             val message = String(delivery.body, Charsets.UTF_8)
