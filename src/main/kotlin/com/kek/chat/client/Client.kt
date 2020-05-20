@@ -3,6 +3,7 @@ package com.kek.chat.client
 import com.rabbitmq.client.*
 import kotlinx.serialization.toUtf8Bytes
 
+
 class Client(private val name: String = "Petr", host: String = "localhost") {
     private var connection: Connection
     private var channels: MutableList<Channel> = mutableListOf()
@@ -27,37 +28,34 @@ class Client(private val name: String = "Petr", host: String = "localhost") {
 
     fun bindChatChannel(channelName: String, messageHandler: (String) -> Unit) {
         val channel = connection.createChannel()
-        val queue = channel.queueDeclare(channelName, true, true, true, emptyMap()).queue
+        val queueName: String = channel.queueDeclare(channelName, true, true, true, emptyMap()).queue
         channels.add(channel)
-        queues.add(queue)
+        queues.add(queueName)
 
-        channel.exchangeBind(channelName, channelName, queue) //??
+        channel.queueBind(queueName, channelName, queueName) //??
 
-        val consumer = object : DefaultConsumer(channel) {
-            override fun handleDelivery(consumerTag: String,
-                                        envelope: Envelope,
-                                        properties: AMQP.BasicProperties,
-                                        body: ByteArray) {
-                val message = body.toString()
-                messageHandler.invoke(message)
-            }
+        val deliverCallback = DeliverCallback { consumerTag: String?, delivery: Delivery ->
+            val message = String(delivery.body, Charsets.UTF_8)
+            messageHandler(message)
+//            println(" [x] Received '$message'")
         }
-
-        channel.basicConsume(queue, true, consumer)
+        channel.basicConsume(queueName, true, deliverCallback, CancelCallback { consumerTag: String? -> })
     }
 
     fun sendMessage(channelName: String, message: String) {
         val index = queues.indexOf(channelName)
         val channel = channels[index]
 
-        channel.basicPublish(channelName, channelName, AMQP.BasicProperties.Builder().build(), "$name : $message".toUtf8Bytes())
+        channel.basicPublish(channelName, channelName, null, "$name : $message".toUtf8Bytes())
 //        channel.basicAck()
     }
 
     fun unbindChannel(name: String) {
         val index = queues.indexOf(name)
         val chanel = channels[index]
-        chanel.close()
+        if (chanel.isOpen) {
+            chanel.close()
+        }
         channels.removeAt(index)
         queues.removeAt(index)
     }

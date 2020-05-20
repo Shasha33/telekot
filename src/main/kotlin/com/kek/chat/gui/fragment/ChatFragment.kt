@@ -22,6 +22,7 @@ class ChatFragment() : Fragment("") {
                     textfield(input) {
                         addEventHandler(KeyEvent.KEY_PRESSED) {
                             if (it.code == KeyCode.ENTER) {
+                                println(input.value)
                                 controller.sendMessage(name, input.value ?: "")
                                 input.value = ""
                             }
@@ -36,7 +37,7 @@ class ChatFragment() : Fragment("") {
 
         name = params["name"] as String? ?: ""
         title = name
-        controller.bindToChat(name) { addMessage(it) }
+        controller.bindToChat(name) { runLater{ addMessage(it) } }
     }
 
     override fun onUndock() {
@@ -45,6 +46,7 @@ class ChatFragment() : Fragment("") {
     }
 
     private fun addMessage(newText: String) {
+//        println("get >> $newText")
         textFlow.add(text(">> $newText\n"))
     }
 
