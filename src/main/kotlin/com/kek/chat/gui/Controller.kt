@@ -18,4 +18,8 @@ class MainController : Controller() {
         client.sendMessage(channel, message)
     }
 
+    fun shutdown() {
+        client.close()
+    }
+
 }
