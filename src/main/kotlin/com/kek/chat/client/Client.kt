@@ -30,7 +30,7 @@ class Client(private val name: String = "Petr", host: String = "localhost") {
     fun bindChatChannel(channelName: String, messageHandler: (String) -> Unit) {
         val channel = connection.createChannel()
         val queueName: String = channel.queueDeclare().queue
-        println(queueName)
+//        println(queueName)
 //        queues.add(queueName)
 
         channel.queueBind(queueName, channelName, "")
