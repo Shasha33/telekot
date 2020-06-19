@@ -1,25 +1,35 @@
-import com.kek.chat.Client
-import com.kek.chat.Server
+import com.kek.chat.gui.MainController
+import com.kek.chat.gui.view.MainView
+import javafx.scene.paint.Color
+import tornadofx.*
+
+class HelloWorldStyle : Stylesheet() {
+    companion object {
+        val mainPanel by cssclass()
+    }
+
+    init {
+        root {
+            prefWidth = 400.px
+            prefHeight = 400.px
+        }
+
+        mainPanel {
+            borderWidth += box(4.px)
+            borderColor += box(Color.RED)
+        }
+    }
+}
+
+class HelloWorldApp : App(MainView::class, HelloWorldStyle::class) {
+    private val controller: MainController by inject()
+
+    override fun stop() {
+        controller.shutdown()
+        super.stop()
+    }
+}
 
 fun main(args: Array<String>) {
-    when(args.size) {
-        3 -> {
-            val name = args[0]
-            val address = args[1]
-            val port = args[2]
-            val client = Client(name, address, port)
-            client.runClient()
-        }
-
-        2 -> {
-            val name = args[0]
-            val port = args[1]
-            val server = Server(name, port)
-            server.runServer()
-        }
-        else -> {
-            print("unsupported argument number")
-        }
-
-    }
+    launch<HelloWorldApp>()
 }
